@@ -11,7 +11,7 @@ return new class extends Migration//annyomunas class
      */
     public function up(): void
     {
-        Schema::create('catagories', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();//id bigint unsigned auto_increment=>primery key
             $table->string('name',100);//VARCHAR n , CHAR 255 ,TEXT (no max)
             $table->timestamps();//created_at , updated_at :TIMESTAMP ,DATETIME
@@ -23,6 +23,6 @@ return new class extends Migration//annyomunas class
      */
     public function down(): void
     {
-        Schema::dropIfExists('catagories');
+        Schema::dropIfExists('categories');
     }
 };

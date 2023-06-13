@@ -17,7 +17,7 @@ class CategorySeeder extends Seeder
 
         for ($i=0; $i < 10; $i++) { 
             # code...
-            DB::table('catagories')->insert(
+            DB::table('categories')->insert(
                 [
                     'name'=>'category'.$i,
                     'created_at'=>now()

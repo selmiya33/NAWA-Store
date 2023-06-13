@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();//accept null
             // $table->unsignedBigInteger('category_id')->nullable();
             $table->foreignId('category_id')->nullable()
-                    ->constrained('catagories','id')->nullOnDelete();//->cascadeOnDelete()->restrictOnDelete;
+                    ->constrained('categories','id')->nullOnDelete();//->cascadeOnDelete()->restrictOnDelete;
             $table->text('description')->nullable();
             $table->unsignedInteger('quantity')->default(1);
             $table->text('short_description')->nullable();

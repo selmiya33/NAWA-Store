@@ -26,7 +26,7 @@ class CategoryController extends Controller
     public function create()
     {
         //
-        return view('Admin.categories.create');
+        return view('Admin.categories.create',['category' => new Category()]);
     }
 
     /**
@@ -39,8 +39,10 @@ class CategoryController extends Controller
         $category->name = $request->input('name');
         $category->save();
 
-        return redirect()->route('categories.index');
-        }
+        return redirect()
+                ->route('categories.index')
+                ->with('success',"Category {{$category->name}} added");
+    }
 
     /**
      * Display the specified resource.
@@ -56,6 +58,8 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         //
+        $category = Category::findOrFail($id);
+        return view('Admin.categories.edit',['category'=> $category]);
     }
 
     /**
@@ -64,6 +68,12 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $category = Category::findOrFail($id);
+        $category->name = $request->input('name');
+        $category->save();
+
+        return redirect()->route('categories.index')
+                     ->with('success',"Category {{$category->name}} updated");
     }
 
     /**
@@ -72,5 +82,9 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         //
+        $category = Category::findOrFail($id);
+        $category->delete();
+        // Category::destroy($id);
+        return redirect()->route('categories.index')->with('success',"Category {{$category->name}}deleted");
     }
 }

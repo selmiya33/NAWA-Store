@@ -31,7 +31,7 @@ class ProductController extends Controller
         // ]);
 
         /////////////mvc categories
-        $products = Product::Join('categories','categories.id','=','products.category_id')
+        $products = Product::LeftJoin('categories','categories.id','=','products.category_id')
                                 ->select([
                                     'products.*',
                                     'categories.name as category_name'
@@ -52,8 +52,9 @@ class ProductController extends Controller
     {
         //
         $categories = Category::all();
+        $product = new Product();
 
-        return view('admin.products.create',['categories' => $categories]);
+        return view('admin.products.create',['product' => $product,'categories' => $categories]);
     }
 
     /**
@@ -75,8 +76,9 @@ class ProductController extends Controller
         $product->save();
 
         //prg : post redirect get
-        return redirect()->route('products.index');//redirect عبارة عن get
-
+        return redirect()
+                    ->route('products.index')/*redirect عبارة عن get*/
+                    ->with('success',"product {{$product->name_product}} created");//Flash Messages
     }
 
     /**
@@ -93,6 +95,21 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         //
+        // $product =Product::where('id','=',$id)->first();//return model or null if not found
+
+        $categories = Category::all();
+        $product =Product::findOrFail($id);//return model or null if not found
+
+   
+        // $product =Product::find($id);//return model or null if not found
+        // if(!$product){
+        //     // return redirect()->route('products.index');
+        //     abort(404);
+        // }
+
+            // dd($product);
+        return view('Admin.products.edit',['product'=>$product, 'categories'=>$categories]);
+        
     }
 
     /**
@@ -101,6 +118,19 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $product =Product::findOrFail($id);//return model or null if not found
+        $product->name_product = $request->input('name');
+        $product->slug = $request->input('slug');
+        $product->price = $request->input('price');
+        $product->comper_price = $request->input('compare_price');
+        $product->description = $request->input('description');
+        $product->category_id = $request->input('category_name');
+
+        $product->save();
+        //prg : post redirect get
+        return redirect()
+                ->route('products.index')
+                ->with('success',"product {{$product->name_product}} updated");//Flash Messages
     }
 
     /**
@@ -109,5 +139,12 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+        $product =Product::findOrFail($id);
+        $product->delete();
+        // Product::destroy($id);
+
+        return redirect()
+                ->route('products.index')
+                ->with('success',"product {{$product->name_product}} deleted");//Flash Messages
     }
 }

@@ -37,7 +37,6 @@
                   </form>
                   </div>
                 </td>
-
             </tr>
             @endforeach
         </tbody>

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -15,33 +14,18 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //select products.* ,categories.name as category_name from products  -----insert join categories on categories.id = products.catagory_id
-        // $products = DB::table('products')->get(''); //return collection object = array
-        // $products = DB::table('products')
-        //                 ->Join('catagories','catagories.id','=','products.category_id')
-        //                 ->select(
-        //                     'products.*',
-        //                     'catagories.name as category_name',
-        //                 )
-        //                 ->get();//dd()
-        // // dd($products);
-        // return view('admin.products.index',[
-        //     'title'=> 'products item',
-        //     'products'=> $products,
-        // ]);
 
-        /////////////mvc categories
-        $products = Product::LeftJoin('categories','categories.id','=','products.category_id')
-                                ->select([
-                                    'products.*',
-                                    'categories.name as category_name'
-                                       ])
-                               ->get();    
+        $products = Product::LeftJoin('categories', 'categories.id', '=', 'products.category_id')
+            ->select([
+                'products.*',
+                'categories.name as category_name',
+            ])
+            ->get();
 
-        return view('admin.products.index',[
-                'title'=> 'products item',
-                'products'=> $products,
-                ]);
+        return view('admin.products.index', [
+            'title' => 'products item',
+            'products' => $products,
+        ]);
 
     }
 
@@ -52,33 +36,24 @@ class ProductController extends Controller
     {
         //
         $categories = Category::all();
-        $product = new Product();
 
-        return view('admin.products.create',['product' => $product,'categories' => $categories]);
+        return view('admin.products.create', [
+            'product' => new Product(),
+            'categories' => $categories,
+            'status_options' => Product::statusOpations(),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
-        $product = new Product();
-        $product->name_product = $request->input('name');
-        $product->slug = $request->input('slug');
-        $product->price = $request->input('price');
-        $product->comper_price = $request->input('compare_price');
-        $product->description = $request->input('description');
-        $product->category_id = $request->input('category_name');
-
-
-
-        $product->save();
-
-        //prg : post redirect get
+        $product = Product::create($request->validated());
+        // $product->status = $request->input('status', 'active');
         return redirect()
-                    ->route('products.index')/*redirect عبارة عن get*/
-                    ->with('success',"product {{$product->name_product}} created");//Flash Messages
+            ->route('products.index') 
+            ->with('success', "product {{$product->name_product}} created"); 
     }
 
     /**
@@ -92,59 +67,41 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Product $product)
     {
-        //
-        // $product =Product::where('id','=',$id)->first();//return model or null if not found
-
         $categories = Category::all();
-        $product =Product::findOrFail($id);//return model or null if not found
 
-   
-        // $product =Product::find($id);//return model or null if not found
-        // if(!$product){
-        //     // return redirect()->route('products.index');
-        //     abort(404);
-        // }
+        return view('Admin.products.edit', [
+            'product' => $product,
+            'categories' => $categories,
+            'status_options' => Product::statusOpations()
+        ]);
 
-            // dd($product);
-        return view('Admin.products.edit',['product'=>$product, 'categories'=>$categories]);
-        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
-        $product =Product::findOrFail($id);//return model or null if not found
-        $product->name_product = $request->input('name');
-        $product->slug = $request->input('slug');
-        $product->price = $request->input('price');
-        $product->comper_price = $request->input('compare_price');
-        $product->description = $request->input('description');
-        $product->category_id = $request->input('category_name');
 
-        $product->save();
-        //prg : post redirect get
+        $product = Product::findOrFail($id);
+        $product->update($request->validated());
+
         return redirect()
-                ->route('products.index')
-                ->with('success',"product {{$product->name_product}} updated");//Flash Messages
+            ->route('products.index')
+            ->with('success', "product {{$product->name_product}} updated");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        //
-        $product =Product::findOrFail($id);
         $product->delete();
-        // Product::destroy($id);
-
         return redirect()
-                ->route('products.index')
-                ->with('success',"product {{$product->name_product}} deleted");//Flash Messages
+            ->route('products.index')
+            ->with('success', "product {{$product->name_product}} deleted"); //Flash Messages
     }
+
 }

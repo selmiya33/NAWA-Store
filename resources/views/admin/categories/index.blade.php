@@ -16,6 +16,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Image</th>
                 <th>create at</th>
                 <th>update at</th>
             </tr>
@@ -25,6 +26,11 @@
             <tr>
                 <td><?= $category->id?></td>
                 <td><?= $category->name?></td>
+                <td>
+                  <a href="{{$category->image_url}}">
+                      <img src="{{$category->image_url}}" alt="{{$category->name}}" srcset="" high =60 width=60>
+                  </a>
+               </td>
                 <td><?= $category->created_at->format('d F Y ')?></td>
                 <td><?= $category->updated_at->format('d F Y ')?></td>
                 <td>

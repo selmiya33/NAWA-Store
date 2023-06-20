@@ -23,6 +23,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name'=>'nullable|required|min:3|max:50',
+            'image'=> 'nullable|image|dimensions:min_width=400,min_height=300|max:500',//kilobayte
         ];
     }
 }

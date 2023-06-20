@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
@@ -21,11 +22,12 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('product',0);
+        $product = $this->route('product',new Product);
+        $id = $product? $product->id : 0;
 
         return [
             'name_product'=>'nullable|required|max:255|min:3',
-            'slug'=> "required|unique:products,slug,$id",
+            'slug'=> "required|unique:products,slug,{$id}",
             'category_id'=> 'nullable|int|exists:categories,id',
             'description'=> 'nullable|string',
             'short_description'=> 'nullable|string|max:500',
@@ -33,8 +35,10 @@ class ProductRequest extends FormRequest
             'status'=>'required',
             'comper_price'=> 'nullable|numeric|min:0,gt:price',
             // 'image'=>'file:=|mimetypes:image/png,image/jpg',
-            // 'image'=>'file|mimes:png,jpg',
+            // 'image'=>'nullable|file|mimes:png,jpg',
             'image'=> 'nullable|image|dimensions:min_width=400,min_height=300|max:500',//kilobayte
+            'gallery','nullable|array',
+            'gallery.*' => 'image'
 
         ];
     }

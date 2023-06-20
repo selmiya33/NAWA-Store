@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -15,8 +16,8 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('Admin.categories.index',[
-            'title'=> 'categories',
+        return view('Admin.categories.index', [
+            'title' => 'categories',
             'categories' => $categories,
         ]);
     }
@@ -27,7 +28,7 @@ class CategoryController extends Controller
     public function create()
     {
         //
-        return view('Admin.categories.create',['category' => new Category()]);
+        return view('Admin.categories.create', ['category' => new Category()]);
     }
 
     /**
@@ -35,15 +36,19 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        //.
-        // $category = new Category();
-        // $category->name = $request->input('name');
-        // $category->save();
-        $category = Category::create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store("uploads/categories", ['disk'=>'public']);
+            $data['image'] = $path;
+        }
+
+        Category::create($data);
 
         return redirect()
-                ->route('categories.index')
-                ->with('success',"Category  added");
+            ->route('categories.index')
+            ->with('success', "Category  added");
     }
 
     /**
@@ -59,9 +64,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //string $id
-        // $category = Category::findOrFail($id);
-        return view('Admin.categories.edit',['category'=> $category]);
+        return view('Admin.categories.edit', ['category' => $category]);
     }
 
     /**
@@ -69,14 +72,23 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        //
-        // $category = Category::findOrFail($id);
-        // $category->name = $request->input('name');
-        // $category->save();
-        $category->update($request->validated());
+        $data = $request->validated();
 
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store("uploads/categories", ['disk'=>'public']);
+            $data['image'] = $path;
+        }
+
+        $old_image = $category->image;
+        $category->update($data);
+
+        if($old_image && $old_image != $category->image){
+            Storage::disk('public')->delete($old_image);
+        }
+        
         return redirect()->route('categories.index')
-                     ->with('success',"Category {{$category->name}} updated");
+            ->with('success', "Category {{$category->name}} updated");
     }
 
     /**
@@ -84,11 +96,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //string $id
-        // $category = Category::findOrFail($id);
-        // Category::destroy($id);
-
         $category->delete();
-        return redirect()->route('categories.index')->with('success',"Category {{$category->name}}deleted");
+
+        if($category->image){
+            Storage::disk('public')->delete($category->image);
+        }
+
+        return redirect()->route('categories.index')->with('success', "Category {{$category->name}}deleted");
     }
 }

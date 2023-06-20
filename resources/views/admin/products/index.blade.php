@@ -15,6 +15,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>image</th>
                 <th>catagories</th>
                 <th>price</th>
                 <th>status</th>
@@ -25,8 +26,13 @@
             <tr>
                 <td><?= $product->id?></td>
                 <td><?= $product->name_product?></td>
+                <td>
+                    <a href="{{$product->image_url}}">
+                        <img src="{{$product->image_url}}" alt="{{$product->name_product}}" srcset="" high =60 width=60>
+                    </a>
+                 </td>
                 <td><?= $product->category_name?></td>
-                <td><?= $product->price?></td>
+                <td><?= $product->price_formatted?></td>
                 <td><?= $product->status?></td>
                 <td>
                   <div class="btn-group" role="group" aria-label="Basic mixed styles example">

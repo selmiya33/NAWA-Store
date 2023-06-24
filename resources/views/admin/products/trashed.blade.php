@@ -8,10 +8,9 @@
     @endif
     <header class="mb-4 d-flex">
 
-        <h2 class="mb-4 fs-2 ">{{ $title }}</h2>
+        <h2 class="mb-4 fs-2 ">Trased Products</h2>
         <div class="ml-auto">
-            <a class="btn btn-primary m-2" href="{{ route('products.create') }}" role="button">add new product</a>
-            <a class="btn btn-mid btn-danger" href="{{ route('products.trashed') }}">Trash</a>
+            <a class="btn btn-primary m-2" href="{{ route('products.index') }}" role="button">products List</a>
         </div>
     </header>
 
@@ -20,10 +19,8 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>image</th>
-                <th>catagories</th>
-                <th>price</th>
-                <th>status</th>
+                {{-- <th>image</th> --}}
+                <th>Deleted at</th>
             </tr>
         </thead>
         <tbody>
@@ -31,19 +28,21 @@
                 <tr>
                     <td><?= $product->id ?></td>
                     <td><?= $product->name_product ?></td>
-                    <td>
+                    {{-- <td>
                         <a href="{{ $product->image_url }}">
                             <img src="{{ $product->image_url }}" alt="{{ $product->name_product }}" srcset="" high=60
                                 width=60>
                         </a>
-                    </td>
-                    <td><?= $product->category_name ?></td>
-                    <td><?= $product->price_formatted ?></td>
-                    <td><?= $product->status ?></td>
+                    </td> --}}
+                    <td><?= $product->deleted_at ?></td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-mid btn-success">EDIT</a>
-                            <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+                            <form action="{{ route('products.restore', $product->id) }}" method="POST">
+                                @csrf 
+                                @method('PUT')
+                                <button type="submit" class="btn btn-success">restore</button>
+                            </form>
+                            <form action="{{ route('products.force-delete', $product->id) }}" method="POST">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger">DELETE</button>
                             </form>

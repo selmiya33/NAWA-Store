@@ -10,4 +10,5 @@
         @endforeach
 
     </select>
+    <x-form.error name="{{ $name }}" />
 </div>

@@ -22,13 +22,19 @@ class ProductController extends Controller
                 'products.*',
                 'categories.name as category_name',
             ])
-            ->get();
+            // ->whereNull('deleted_at')
+            // ->onlyTrashed()
+            // ->withTrashed()
+            // ->withoutGlobalScope('owner')
+            // ->withoutGlobalScopes()
+            // ->active()
+            // -> status('draft')
+            ->simplepaginate(3); //paginate(3)
 
         return view('admin.products.index', [
             'title' => 'products item',
             'products' => $products,
         ]);
-
     }
 
     /**
@@ -54,26 +60,26 @@ class ProductController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
-            $file =$request->file('image');//return uploadedfile object
-            $path = $file->store('uploads/images','public');
-            $data['image'] =$path;
+            $file = $request->file('image'); //return uploadedfile object
+            $path = $file->store('uploads/images', 'public');
+            $data['image'] = $path;
         }
 
         $product = Product::create($data);
-        
-        if($request->hasFile('gallery')){
+
+        if ($request->hasFile('gallery')) {
             //array of uploadfile
             foreach ($request->file('gallery') as $file) {
                 ProductImage::create([
-                    'product_id'=> $product->id,
-                    'image'=>$file->store('uploads/subImages',['disk'=>'public'])
+                    'product_id' => $product->id,
+                    'image' => $file->store('uploads/subImages', ['disk' => 'public'])
                 ]);
             }
         }
-        
+
         return redirect()
-            ->route('products.index') 
-            ->with('success', "product {{$product->name_product}} created"); 
+            ->route('products.index')
+            ->with('success', "product {{$product->name_product}} created");
     }
 
     /**
@@ -90,15 +96,14 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
-        $gallery = ProductImage::where('product_id','=',$product->id)->get();
+        $gallery = ProductImage::where('product_id', '=', $product->id)->get();
 
         return view('Admin.products.edit', [
             'product' => $product,
             'categories' => $categories,
             'status_options' => Product::statusOpations(),
-            'gallery'=>$gallery,
+            'gallery' => $gallery,
         ]);
-
     }
 
     /**
@@ -110,24 +115,24 @@ class ProductController extends Controller
 
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $file =$request->file('image');//return uploadedfile object
-            $path = $file->store('uploads/images',['disk'=>'public']);
-            $data['image'] =$path;
+            $file = $request->file('image'); //return uploadedfile object
+            $path = $file->store('uploads/images', ['disk' => 'public']);
+            $data['image'] = $path;
         }
 
         $old_image = $product->image;
         $product->update($data);
 
-        if($old_image && $old_image != $product->image){
+        if ($old_image && $old_image != $product->image) {
             Storage::disk('public')->delete($old_image);
         }
 
-        if($request->hasFile('gallery')){
+        if ($request->hasFile('gallery')) {
             //array of uploadfile
             foreach ($request->file('gallery') as $file) {
                 ProductImage::create([
-                    'product_id'=> $product->id,
-                    'image'=>$file->store('uploads/subImages',['disk'=>'public'])
+                    'product_id' => $product->id,
+                    'image' => $file->store('uploads/subImages', ['disk' => 'public'])
                 ]);
             }
         }
@@ -143,13 +148,38 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-
-        if($product->image){
-            Storage::disk('public')->delete($product->image);
-        }
         return redirect()
             ->route('products.index')
             ->with('success', "product {{$product->name_product}} deleted"); //Flash Messages
     }
 
+    public function trashed()
+    {
+        $products = Product::onlyTrashed()->paginate(3);
+        return view('admin.products.trashed', ['products' => $products]);
+    }
+
+    public function restore($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $product->restore(); //بتحذف التاريخ من عمود soft deleted
+        return redirect()
+            ->route('products.index')
+            ->with('success', "product {{$product->name_product}} restord"); //Flash Messages
+    }
+
+    public function forceDelete($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+
+        $product->forceDelete();
+        
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', "product {{$product->name_product}} Deleted forever!"); //Flash Messages
+    }
 }

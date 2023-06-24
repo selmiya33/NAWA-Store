@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use NumberFormatter;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
+    
 
     protected $fillable =[
         'name_product','slug','price','description','short_description','status','category_id','comper_price','image'
@@ -48,5 +51,30 @@ class Product extends Model
         return $foramtter->formatCurrency($this->price, 'USD');
 
     }
+    
+    public function getComperPriceFormattedAttribute(){
+        $foramtter = new NumberFormatter(config('app.local'),NumberFormatter::CURRENCY);
+        return $foramtter->formatCurrency($this->comper_price, 'USD');
 
+    }
+
+    //global scope
+    protected static function booted()
+    {
+        static::addGlobalScope('owner',function(Builder $query){
+            $query->where('user_id','=',1);
+
+        });
+    }
+
+    //local scope
+    public function scopeActive(Builder $query){
+        $query->where('status','=','active');
+
+    }
+
+    public function scopeStatus(Builder $query, $status){
+        $query->where('status','=', $status);
+
+    }
 }

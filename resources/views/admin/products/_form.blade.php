@@ -51,9 +51,7 @@
                 </div>
             @endif
 
-            @error('image')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
+            <x-form.error name="image" />
         </div>
 
     </div>

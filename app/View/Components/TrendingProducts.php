@@ -20,8 +20,10 @@ class TrendingProducts extends Component
         $this->title=$title;
         $this->products = Product::withoutGlobalscope('owner')
         ->latest('updated_at')
-        ->take($count) // ===limit(8)
-        ->get();
+        // ->inRandomOrder()
+        // ->take($count) // ===limit(8)
+        // ->get()
+        ->paginate($count);
 
     }
 

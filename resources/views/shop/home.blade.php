@@ -201,7 +201,7 @@
 
     <!-- Start Trending Product Area -->
 
-    <x-trending-products title="Trending Product x" count="4" />
+    <x-trending-products title="Trending Product" count="8" />
     <!-- End Trending Product Area -->
 
 

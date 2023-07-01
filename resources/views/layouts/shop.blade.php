@@ -78,7 +78,7 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-middle">
                             <ul class="useful-links">
-                                <li><a href="index.html">Home</a></li>
+                                <li><a href="{{ route("home") }}">Home</a></li>
                                 <li><a href="about-us.html">About Us</a></li>
                                 <li><a href="contact.html">Contact Us</a></li>
                             </ul>
@@ -88,7 +88,7 @@
                         <div class="top-end">
                             <div class="user">
                                 <i class="lni lni-user"></i>
-                                Hello
+                                Hello,
                             </div>
                             <ul class="user-login">
                                 <li>
@@ -225,7 +225,7 @@
                         <div class="mega-category-menu">
                             <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
                             <ul class="sub-category">
-                                <li><a href="product-grids.html">Electronics <i class="lni lni-chevron-right"></i></a>
+                                {{-- <li><a href="product-grids.html">Electronics <i class="lni lni-chevron-right"></i></a>
                                     <ul class="inner-sub-category">
                                         <li><a href="product-grids.html">Digital Cameras</a></li>
                                         <li><a href="product-grids.html">Camcorders</a></li>
@@ -248,8 +248,10 @@
                                 <li><a href="product-grids.html">man’s product</a></li>
                                 <li><a href="product-grids.html">Home Audio & Theater</a></li>
                                 <li><a href="product-grids.html">Computers & Tablets </a></li>
-                                <li><a href="product-grids.html">Video Games </a></li>
-                                <li><a href="product-grids.html">Home Appliances </a></li>
+                                <li><a href="product-grids.html">Video Games </a></li> --}}
+                                @foreach ($categories as $category)
+                                <li><a href="{{ route("shop.product.grids") }}">{{ $category->name }} </a></li>
+                                @endforeach
                             </ul>
                         </div>
                         <!-- End Mega Category Menu -->
@@ -265,7 +267,7 @@
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
                                     <li class="nav-item">
-                                        <a href="index.html" aria-label="Toggle navigation">Home</a>
+                                        <a href="{{ route('home') }}" aria-label="Toggle navigation">Home</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="dd-menu active collapsed" href="javascript:void(0)"
@@ -286,7 +288,7 @@
                                             data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
                                             aria-expanded="false" aria-label="Toggle navigation">Shop</a>
                                         <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a href="product-grids.html">Shop Grid</a></li>
+                                            <li class="nav-item"><a href="{{ route("shop.product.grids") }}">Shop Grid</a></li>
                                             <li class="nav-item"><a href="product-list.html">Shop List</a></li>
                                             <li class="nav-item"><a href="product-details.html">shop Single</a></li>
                                             <li class="nav-item"><a href="cart.html">Cart</a></li>
@@ -353,13 +355,13 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-12">
                     <ul class="breadcrumb-nav">
-                        <li><a href="i{{route('home')}}"><i class="lni lni-home"></i> Home</a></li>
+                        <li><a href="{{route('home')}}"><i class="lni lni-home"></i> Home</a></li>
                         <li>{{$title}}</li>
                     </ul>
                 </div>
             </div>
         </div>
-    </div>         
+    </div>
     @endif
     <!-- End Breadcrumbs -->
     {{$slot}}
@@ -461,11 +463,10 @@
                             <div class="single-footer f-link">
                                 <h3>Shop Departments</h3>
                                 <ul>
-                                    <li><a href="javascript:void(0)">Computers & Accessories</a></li>
-                                    <li><a href="javascript:void(0)">Smartphones & Tablets</a></li>
-                                    <li><a href="javascript:void(0)">TV, Video & Audio</a></li>
-                                    <li><a href="javascript:void(0)">Cameras, Photo & Video</a></li>
-                                    <li><a href="javascript:void(0)">Headphones</a></li>
+                                    @foreach ($categories as $category)
+                                    <li><a href="javascript:void(0)">{{ $category->name }}</a></li>
+                                    @endforeach
+
                                 </ul>
                             </div>
                             <!-- End Single Widget -->

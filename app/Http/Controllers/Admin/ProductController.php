@@ -25,11 +25,11 @@ class ProductController extends Controller
             // ->whereNull('deleted_at')
             // ->onlyTrashed()
             // ->withTrashed()
-            // ->withoutGlobalScope('owner')
+            ->withoutGlobalScope('owner')
             // ->withoutGlobalScopes()
             // ->active()
             // -> status('draft')
-            ->simplepaginate(3); //paginate(3)
+            ->paginate(3); //simplepaginate(3)
 
         return view('admin.products.index', [
             'title' => 'products item',
@@ -98,7 +98,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $gallery = ProductImage::where('product_id', '=', $product->id)->get();
 
-        return view('Admin.products.edit', [
+        return view('admin.products.edit', [
             'product' => $product,
             'categories' => $categories,
             'status_options' => Product::statusOpations(),
@@ -165,7 +165,7 @@ class ProductController extends Controller
         $product->restore(); //بتحذف التاريخ من عمود soft deleted
         return redirect()
             ->route('products.index')
-            ->with('success', "product {{$product->name_product}} restord"); //Flash Messages
+            ->with('success', "product {$product->name_product} restord"); //Flash Messages
     }
 
     public function forceDelete($id)
@@ -173,7 +173,7 @@ class ProductController extends Controller
         $product = Product::onlyTrashed()->findOrFail($id);
 
         $product->forceDelete();
-        
+
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }

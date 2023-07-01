@@ -53,5 +53,8 @@
             @endforeach
         </tbody>
     </table>
-    {{ $products->links() }}
+
+    <div class="h-50 d-flex align-items-center justify-content-center">
+        {{ $products->links() }}
+    </div>
 @endsection

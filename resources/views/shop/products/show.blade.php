@@ -195,25 +195,27 @@
                             <div class="reviews">
                                 <h4 class="title">Latest Reviews</h4>
                                 <!-- Start Single Review -->
-                                <div class="single-review">
-                                    {{-- @foreach ($reviews as $review_user) --}}
+                                @foreach ($reviews as $item)
+                                    <div class="single-review">
                                         <img src="https://via.placeholder.com/150x150" alt="#">
                                         <div class="review-info">
-                                            <h4>Awesome quality for the price
-                                                <span>Name user</span>
+                                            <h4> {{ $item->subject }}
+                                                <span>{{ $users->pluck('name','user_id')}}</span>
                                             </h4>
                                             <ul class="stars">
-                                                <li><i class="lni lni-star-filled"></i></li>
-                                                <li><i class="lni lni-star-filled"></i></li>
-                                                <li><i class="lni lni-star-filled"></i></li>
-                                                <li><i class="lni lni-star-filled"></i></li>
-                                                <li><i class="lni lni-star-filled"></i></li>
+                                                @for ($i = 1; $i <= $item->rating; $i++)
+                                                    <li><i class="lni lni-star-filled"></i></li>
+                                                @endfor
+                                                @for ($i = 0; $i < (5- $item->rating); $i++)
+
+                                                        <li><i class="lni lni-star"></i></li>
+
+                                                @endfor
                                             </ul>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                                tempor...</p>
+                                            <p>{{ $item->message }}</p>
                                         </div>
-                                    {{-- @endforeach --}}
-                                </div>
+                                    </div>
+                                @endforeach
                                 <!-- End Single Review -->
                             </div>
                         </div>
@@ -229,6 +231,7 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <form action="{{ route('reviews.store', $product->id) }}" method="post">
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Leave a Review</h5>
@@ -254,7 +257,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="subject">Subject</label>
-                                    <input class="form-control" type="text" id="subject" name="subject" required>
+                                    <input class="form-control" type="text" id="subject" name="subject"
+                                        required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -272,7 +276,7 @@
                         </div>
                         <div class="form-group">
                             <label for="review-message">Review</label>
-                            <textarea class="form-control" id="review-message" rows="8" required></textarea>
+                            <textarea class="form-control" id="review-message" name="message" rows="8" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer button">

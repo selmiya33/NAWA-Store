@@ -37,7 +37,7 @@ class ReviewController extends Controller
         $review->rating = $request->input('rating');
         $review->message = $request->input('message');
         $review->subject = $request->input('subject');
-        $review->user_id = Auth::user()->id;
+        $review->user_id = Auth::id();
         $review->product_id = $id;
 
 

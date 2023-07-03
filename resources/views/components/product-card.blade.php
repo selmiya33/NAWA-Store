@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="product-info">
-        <span class="category">Watches</span>
+        <span class="category">{{ $product->category->name }}</span>
         <h4 class="title">
             <a href="{{ route("shop.products.show",$product->slug) }}">{{ $product->name_product }}</a>
         </h4>
@@ -21,7 +21,7 @@
             <li><span>4.0 Review(s)</span></li>
         </ul>
         <div class="price">
-            <span>{{ $product->price_formatted }}</span>
+           {{ $product->price_formatted }}
             @if ($product->comper_price)
             <span class="discount-price">{{ $product->comper_price_formatted }}</span>
             @endif

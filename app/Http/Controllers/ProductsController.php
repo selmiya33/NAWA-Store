@@ -17,17 +17,21 @@ class ProductsController extends Controller
 
     public function show($slug)
     {
-        $product = Product::active()->withoutGlobalscope('owner')->where('slug', '=', $slug)->firstOrFail();
+        $product = Product::active()->withAvg('reviews', 'rating')->withoutGlobalscope('owner')->where('slug', '=', $slug)->firstOrFail();
         $gallery = ProductImage::where('product_id', '=', $product->id)->get();
-        $reviews =review::all();
-        $users = User::all();
-        return view('shop.Products.show', ["product" => $product ,"gallery"=>$gallery, "reviews" =>$reviews ,"users"=>$users]);
+        $reviews = Review::latest()->where('product_id', '=', $product->id)->get();
+
+        return view('shop.Products.show', ["product" => $product, "gallery" => $gallery, "reviews" => $reviews]);
     }
 
-    public function grid()
+    public function grid(Request $request)
     {
-        $products = Product::withoutGlobalscope('owner')->active()->inRandomOrder()->paginate(9);
+        $products = Product::withoutGlobalscope('owner')
+            ->active()
+            ->filter($request->query())
+            ->inRandomOrder()
+            ->paginate(9);
 
-        return view("shop.products.grids",["products" => $products]);
+        return view("shop.products.grids", ["products" => $products]);
     }
 }

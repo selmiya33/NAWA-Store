@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -15,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::paginate(3);
+        $categories = Category::withCount('products')->paginate(3);
         return view('Admin.categories.index', [
             'title' => 'categories',
             'categories' => $categories,
@@ -86,7 +87,7 @@ class CategoryController extends Controller
         if($old_image && $old_image != $category->image){
             Storage::disk('public')->delete($old_image);
         }
-        
+
         return redirect()->route('categories.index')
             ->with('success', "Category {{$category->name}} updated");
     }

@@ -10,13 +10,14 @@
     <h2 class="mb-4 fs-2 ">{{$title}}</h2>
     <a class="btn btn-primary mb-2" href="{{route("categories.create")}}" role="button">add new category</a>
 
-    
+
     <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Image</th>
+                <th>product #</th>
                 <th>create at</th>
                 <th>update at</th>
             </tr>
@@ -31,6 +32,7 @@
                       <img src="{{$category->image_url}}" alt="{{$category->name}}" srcset="" high =60 width=60>
                   </a>
                </td>
+               <td><?= $category->products_count?></td>
                 <td><?= $category->created_at->format('d F Y ')?></td>
                 <td><?= $category->updated_at->format('d F Y ')?></td>
                 <td>

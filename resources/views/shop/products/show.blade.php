@@ -23,8 +23,7 @@
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
                             <h2 class="title">{{ $product->name_product }}</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
-                                    cameras</a></p>
+                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">{{ $product->category->name }}</a></p>
                             <h3 class="price">{{ $product->price_formatted }}
                                 @if ($product->comper_price)
                                     <span>{{ $product->comper_price_formatted }}</span>
@@ -140,7 +139,8 @@
                 <div class="row">
                     <div class="col-lg-4 col-12">
                         <div class="single-block give-review">
-                            <h4>4.5 (Overall)</h4>
+                            <h4> {{ number_format( $product->reviews_avg_rating, 1) }} (Overall)</h4>
+
                             <ul>
                                 <li>
                                     <span>5 stars - 38</span>
@@ -200,7 +200,7 @@
                                         <img src="https://via.placeholder.com/150x150" alt="#">
                                         <div class="review-info">
                                             <h4> {{ $item->subject }}
-                                                <span>{{ $users->pluck('name','user_id')}}</span>
+                                                <span>{{ $item->user->name}}</span>
                                             </h4>
                                             <ul class="stars">
                                                 @for ($i = 1; $i <= $item->rating; $i++)
@@ -220,6 +220,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
+                    <h2>Similer Products</h2>
+                    @foreach ($product->category->products()->where('id','<>',$product->id)->get() as $similer_product)
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <x-product-card :product="$similer_product" />
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

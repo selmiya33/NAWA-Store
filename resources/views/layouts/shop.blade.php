@@ -4,17 +4,17 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>{{$title}} | {{config('app.name')}}</title>
+    <title>{{ $title }} | {{ config('app.name') }}</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.svg')}}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/favicon.svg') }}" />
 
     <!-- ========================= CSS here ========================= -->
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/css/LineIcons.3.0.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/css/tiny-slider.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/css/glightbox.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/css/main.css')}}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/LineIcons.3.0.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/tiny-slider.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/glightbox.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
 
 </head>
 
@@ -78,7 +78,7 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-middle">
                             <ul class="useful-links">
-                                <li><a href="{{ route("home") }}">Home</a></li>
+                                <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="about-us.html">About Us</a></li>
                                 <li><a href="contact.html">Contact Us</a></li>
                             </ul>
@@ -86,18 +86,38 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-end">
-                            <div class="user">
-                                <i class="lni lni-user"></i>
-                                Hello,
-                            </div>
-                            <ul class="user-login">
-                                <li>
-                                    <a href="login.html">Sign In</a>
-                                </li>
-                                <li>
-                                    <a href="register.html">Register</a>
-                                </li>
-                            </ul>
+                            @auth
+                                <div class="user">
+                                    <i class="lni lni-user"></i>
+                                    Hello,{{ Auth::user()->profile->first_name }}
+                                </div>
+                                <ul class="user-login">
+
+                                    <li>
+                                        <a href="{{ route("profile.edit") }}">Profile</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit()">Logout</a>
+                                    </li>
+                                    <form id="logoutForm" action="{{ route('logout') }}" method="post" style="display: none">
+                                        @csrf
+                                    </form>
+
+                                </ul>
+                            @else
+                                <div class="user">
+                                    <i class="lni lni-user"></i>
+                                    Hello
+                                </div>
+                                <ul class="user-login">
+                                    <li>
+                                        <a href="{{ route('login') }}">Sign In</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('register') }}">Register</a>
+                                    </li>
+                                </ul>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -119,6 +139,7 @@
                         <!-- Start Main Menu Search -->
                         <div class="main-menu-search">
                             <!-- navbar search start -->
+                            <form action="{{ URL::current() }}" method="get">
                             <div class="navbar-search search-style-5">
                                 <div class="search-select">
                                     <div class="select-position">
@@ -133,12 +154,13 @@
                                     </div>
                                 </div>
                                 <div class="search-input">
-                                    <input type="text" placeholder="Search">
+                                    <input type="text" placeholder="Search" name="search" value="{{ request('search') }}">
                                 </div>
                                 <div class="search-btn">
                                     <button><i class="lni lni-search-alt"></i></button>
                                 </div>
                             </div>
+                        </form>
                             <!-- navbar search Ends -->
                         </div>
                         <!-- End Main Menu Search -->
@@ -171,11 +193,12 @@
                                         </div>
                                         <ul class="shopping-list">
                                             <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item"><i
-                                                        class="lni lni-close"></i></a>
+                                                <a href="javascript:void(0)" class="remove"
+                                                    title="Remove this item"><i class="lni lni-close"></i></a>
                                                 <div class="cart-img-head">
                                                     <a class="cart-img" href="product-details.html"><img
-                                                            src="assets/images/header/cart-items/item1.jpg" alt="#"></a>
+                                                            src="assets/images/header/cart-items/item1.jpg"
+                                                            alt="#"></a>
                                                 </div>
 
                                                 <div class="content">
@@ -185,11 +208,12 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item"><i
-                                                        class="lni lni-close"></i></a>
+                                                <a href="javascript:void(0)" class="remove"
+                                                    title="Remove this item"><i class="lni lni-close"></i></a>
                                                 <div class="cart-img-head">
                                                     <a class="cart-img" href="product-details.html"><img
-                                                            src="assets/images/header/cart-items/item2.jpg" alt="#"></a>
+                                                            src="assets/images/header/cart-items/item2.jpg"
+                                                            alt="#"></a>
                                                 </div>
                                                 <div class="content">
                                                     <h4><a href="product-details.html">Wi-Fi Smart Camera</a></h4>
@@ -250,7 +274,7 @@
                                 <li><a href="product-grids.html">Computers & Tablets </a></li>
                                 <li><a href="product-grids.html">Video Games </a></li> --}}
                                 @foreach ($categories as $category)
-                                <li><a href="{{ route("shop.product.grids") }}">{{ $category->name }} </a></li>
+                                    <li><a href="{{ route('shop.product.grids') }}">{{ $category->name }} </a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -284,11 +308,13 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                            data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
-                                            aria-expanded="false" aria-label="Toggle navigation">Shop</a>
+                                        <a class="dd-menu collapsed" href="javascript:void(0)"
+                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-3"
+                                            aria-controls="navbarSupportedContent" aria-expanded="false"
+                                            aria-label="Toggle navigation">Shop</a>
                                         <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a href="{{ route("shop.product.grids") }}">Shop Grid</a></li>
+                                            <li class="nav-item"><a href="{{ route('shop.product.grids') }}">Shop
+                                                    Grid</a></li>
                                             <li class="nav-item"><a href="product-list.html">Shop List</a></li>
                                             <li class="nav-item"><a href="product-details.html">shop Single</a></li>
                                             <li class="nav-item"><a href="cart.html">Cart</a></li>
@@ -296,11 +322,13 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                            data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent"
-                                            aria-expanded="false" aria-label="Toggle navigation">Blog</a>
+                                        <a class="dd-menu collapsed" href="javascript:void(0)"
+                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-4"
+                                            aria-controls="navbarSupportedContent" aria-expanded="false"
+                                            aria-label="Toggle navigation">Blog</a>
                                         <ul class="sub-menu collapse" id="submenu-1-4">
-                                            <li class="nav-item"><a href="blog-grid-sidebar.html">Blog Grid Sidebar</a>
+                                            <li class="nav-item"><a href="blog-grid-sidebar.html">Blog Grid
+                                                    Sidebar</a>
                                             </li>
                                             <li class="nav-item"><a href="blog-single.html">Blog Single</a></li>
                                             <li class="nav-item"><a href="blog-single-sidebar.html">Blog Single
@@ -345,26 +373,26 @@
 
     <!-- Start Breadcrumbs -->
     @if ($showbreadcrumb)
-    <div class="breadcrumbs">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6 col-12">
-                    <div class="breadcrumbs-content">
-                        <h1 class="page-title">{{$title}}</h1>
+        <div class="breadcrumbs">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <div class="breadcrumbs-content">
+                            <h1 class="page-title">{{ $title }}</h1>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-12">
-                    <ul class="breadcrumb-nav">
-                        <li><a href="{{route('home')}}"><i class="lni lni-home"></i> Home</a></li>
-                        <li>{{$title}}</li>
-                    </ul>
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <ul class="breadcrumb-nav">
+                            <li><a href="{{ route('home') }}"><i class="lni lni-home"></i> Home</a></li>
+                            <li>{{ $title }}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
     <!-- End Breadcrumbs -->
-    {{$slot}}
+    {{ $slot }}
 
     <!-- Start Footer Area -->
     <footer class="footer">
@@ -464,7 +492,7 @@
                                 <h3>Shop Departments</h3>
                                 <ul>
                                     @foreach ($categories as $category)
-                                    <li><a href="javascript:void(0)">{{ $category->name }}</a></li>
+                                        <li><a href="javascript:void(0)">{{ $category->name }}</a></li>
                                     @endforeach
 
                                 </ul>
@@ -518,12 +546,11 @@
     </a>
 
     <!-- ========================= JS here ========================= -->
-    <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('assets/js/tiny-slider.js')}}"></script>
-    <script src="{{asset('assets/js/glightbox.min.js')}}"></script>
-    <script src="{{asset('assets/js/main.js')}}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/tiny-slider.js') }}"></script>
+    <script src="{{ asset('assets/js/glightbox.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
     <script type="text/javascript">
-
         //========= glightbox
         GLightbox({
             'href': 'https://www.youtube.com/watch?v=r44RKWyfcFw&fbclid=IwAR21beSJORalzmzokxDRcGfkZA1AtRTE__l5N4r09HcGS5Y6vOluyouM9EM',

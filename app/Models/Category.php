@@ -12,10 +12,14 @@ class Category extends Model
         protected $fillable =['name','image'];
 
 
+        public function products(){
+            return $this->hasMany(Product::class);
+        }
+        
         public function getImageUrlAttribute(){
             if ($this->image) {
                 return Storage::disk('public')->url($this->image);
-    
+
             }
             return 'https://placehold.co/100x100/orange/white?text=add+Image';
         }

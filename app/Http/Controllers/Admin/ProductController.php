@@ -2,33 +2,52 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\ProductImage;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use App\Http\Requests\ProductRequest;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
+    public function __construct(Request $request)
+    {
+        // if ($request->method() == "GET") {
+
+        //     $categories = Category::all();
+        //     View::share([
+        //         'categories' => $categories,
+        //         'status_options' => Product::statusOpations(),
+        //     ]);
+        // }
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $products = Product::LeftJoin('categories', 'categories.id', '=', 'products.category_id')
-            ->select([
-                'products.*',
-                'categories.name as category_name',
-            ])
+        // $products = Product::LeftJoin('categories', 'categories.id', '=', 'products.category_id')
+        //     ->select([
+        //         'products.*',
+        //         'categories.name as category_name',
+        //     ])
+        $products = Product::
             // ->whereNull('deleted_at')
             // ->onlyTrashed()
             // ->withTrashed()
-            ->withoutGlobalScope('owner')
+            withoutGlobalScope('owner')
+            ->with('category')
             // ->withoutGlobalScopes()
             // ->active()
             // -> status('draft')
+            ->filter($request->query())
             ->paginate(3); //simplepaginate(3)
 
         return view('admin.products.index', [
@@ -43,12 +62,8 @@ class ProductController extends Controller
     public function create()
     {
         //
-        $categories = Category::all();
-
         return view('admin.products.create', [
             'product' => new Product(),
-            'categories' => $categories,
-            'status_options' => Product::statusOpations(),
         ]);
     }
 
@@ -64,6 +79,7 @@ class ProductController extends Controller
             $path = $file->store('uploads/images', 'public');
             $data['image'] = $path;
         }
+        $data['user_id'] = Auth::user()->id;
 
         $product = Product::create($data);
 
@@ -95,13 +111,10 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::all();
         $gallery = ProductImage::where('product_id', '=', $product->id)->get();
 
         return view('admin.products.edit', [
             'product' => $product,
-            'categories' => $categories,
-            'status_options' => Product::statusOpations(),
             'gallery' => $gallery,
         ]);
     }

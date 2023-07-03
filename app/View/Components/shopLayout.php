@@ -30,6 +30,6 @@ class shopLayout extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('layouts.shop',);
+        return view('layouts.shop');
     }
 }

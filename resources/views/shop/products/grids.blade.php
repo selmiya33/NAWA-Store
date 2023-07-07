@@ -104,9 +104,9 @@
                             <form action="{{ URL::current() }}" method="get">
                                 @foreach ($categories as $id => $category)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="{{ $category->name }}"
+                                        <input class="form-check-input" type="checkbox" value="{{ $category->id }}"
                                             id="flexCheckDefault{{ $id * 11 }}" name="categories[]"
-                                            @checked(request("flexCheckDefault{$id}{$id}"))>
+                                            @checked(in_array($category->id ,request("categories", [])))>
                                         <label class="form-check-label" for="flexCheckDefault{{ $id * 11 }}">
                                             {{ $category->name }} ({{ $category->products_count }})
                                         </label>

@@ -4,7 +4,7 @@
         <div class="single-category" >
             <h3 class="heading">{{ $category->name }}</h3>
             <ul style="width: 90px; height: 150px;">
-            @foreach ($category->products()->where("category_id",'=',$category->id)->get() as $product)
+            @foreach ($category->products()->withoutGlobalscope('owner')->get() as $product)
                 <li ><a href="product-grids.html">{{ $product->name_product }}</a></li>
             @endforeach
         </ul>

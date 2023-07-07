@@ -42,6 +42,15 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+
+
+    public function users(){
+        return $this->belongsToMany(User::class,'carts','product_id','user_id','id','id')
+        ->withPivot(['quantity'])
+        ->withTimestamps()
+        ->using(Cart::class);
+    }
+
     //Attribute accessors get----Attributenn//img_url
     public function getImageUrlAttribute(){
         if ($this->image) {
@@ -67,14 +76,14 @@ class Product extends Model
 
     }
 
-    //global scope
-    protected static function booted()
-    {
-        static::addGlobalScope('owner',function(Builder $query){
-            $query->where('user_id','=', Auth::id());
+    // // global scope
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope('owner',function(Builder $query){
+    //         $query->where('user_id','=', Auth::id());
 
-        });
-    }
+    //     });
+    // }
 
     //local scope
     public function scopeActive(Builder $query){

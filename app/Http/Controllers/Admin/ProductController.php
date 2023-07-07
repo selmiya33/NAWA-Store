@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,14 +19,15 @@ class ProductController extends Controller
 
     public function __construct(Request $request)
     {
-        // if ($request->method() == "GET") {
+        if ($request->method() == "GET") {
 
-        //     $categories = Category::all();
-        //     View::share([
-        //         'categories' => $categories,
-        //         'status_options' => Product::statusOpations(),
-        //     ]);
-        // }
+            $categories = Category::all();
+            View::share([
+                'categories' => $categories,
+                'status_options' => Product::statusOpations(),
+            ]);
+        }
+
     }
     /**
      * Display a listing of the resource.
@@ -48,7 +50,8 @@ class ProductController extends Controller
             // ->active()
             // -> status('draft')
             ->filter($request->query())
-            ->paginate(3); //simplepaginate(3)
+            ->paginate(3) //simplepaginate(3)
+            ->withQueryString();
 
         return view('admin.products.index', [
             'title' => 'products item',
@@ -73,6 +76,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $data = $request->validated();
+        // $data['slug'] = Str::slug();
 
         if ($request->hasFile('image')) {
             $file = $request->file('image'); //return uploadedfile object

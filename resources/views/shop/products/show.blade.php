@@ -23,77 +23,84 @@
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
                             <h2 class="title">{{ $product->name_product }}</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">{{ $product->category->name }}</a></p>
+                            <p class="category"><i class="lni lni-tag"></i> Drones:<a
+                                    href="javascript:void(0)">{{ $product->category->name }}</a></p>
                             <h3 class="price">{{ $product->price_formatted }}
                                 @if ($product->comper_price)
                                     <span>{{ $product->comper_price_formatted }}</span>
                                 @endif
                             </h3>
                             <p class="info-text">{{ $product->short_description }}</p>
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-12">
-                                    <div class="form-group color-option">
-                                        <label class="title-label" for="size">Choose color</label>
-                                        <div class="single-checkbox checkbox-style-1">
-                                            <input type="checkbox" id="checkbox-1" checked>
-                                            <label for="checkbox-1"><span></span></label>
-                                        </div>
-                                        <div class="single-checkbox checkbox-style-2">
-                                            <input type="checkbox" id="checkbox-2">
-                                            <label for="checkbox-2"><span></span></label>
-                                        </div>
-                                        <div class="single-checkbox checkbox-style-3">
-                                            <input type="checkbox" id="checkbox-3">
-                                            <label for="checkbox-3"><span></span></label>
-                                        </div>
-                                        <div class="single-checkbox checkbox-style-4">
-                                            <input type="checkbox" id="checkbox-4">
-                                            <label for="checkbox-4"><span></span></label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-12">
-                                    <div class="form-group">
-                                        <label for="color">Battery capacity</label>
-                                        <select class="form-control" id="color">
-                                            <option>5100 mAh</option>
-                                            <option>6200 mAh</option>
-                                            <option>8000 mAh</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-12">
-                                    <div class="form-group quantity">
-                                        <label for="color">Quantity</label>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bottom-content">
-                                <div class="row align-items-end">
+                            <form action="{{ route('cart') }}" method="post">
+                                @csrf
+
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <div class="row">
                                     <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="button cart-button">
-                                            <button class="btn" style="width: 100%;">Add to Cart</button>
+                                        <div class="form-group color-option">
+                                            <label class="title-label" for="size">Choose color</label>
+                                            <div class="single-checkbox checkbox-style-1">
+                                                <input type="checkbox" id="checkbox-1" checked>
+                                                <label for="checkbox-1"><span></span></label>
+                                            </div>
+                                            <div class="single-checkbox checkbox-style-2">
+                                                <input type="checkbox" id="checkbox-2">
+                                                <label for="checkbox-2"><span></span></label>
+                                            </div>
+                                            <div class="single-checkbox checkbox-style-3">
+                                                <input type="checkbox" id="checkbox-3">
+                                                <label for="checkbox-3"><span></span></label>
+                                            </div>
+                                            <div class="single-checkbox checkbox-style-4">
+                                                <input type="checkbox" id="checkbox-4">
+                                                <label for="checkbox-4"><span></span></label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-reload"></i> Compare</button>
+                                        <div class="form-group">
+                                            <label for="color">Battery capacity</label>
+                                            <select class="form-control" id="color">
+                                                <option>5100 mAh</option>
+                                                <option>6200 mAh</option>
+                                                <option>8000 mAh</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                        <div class="form-group quantity">
+                                            <label for="color">Quantity</label>
+                                            <select class="form-control" id="color" name="quantity">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="bottom-content">
+                                    <div class="row align-items-end">
+                                        <div class="col-lg-4 col-md-4 col-12">
+                                            <div class="button cart-button">
+                                                <button class="btn" type="submit" style="width: 100%;">Add to Cart</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-12">
+                                            <div class="wish-button">
+                                                <button class="btn"><i class="lni lni-reload"></i> Compare</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-12">
+                                            <div class="wish-button">
+                                                <button class="btn"><i class="lni lni-heart"></i> To
+                                                    Wishlist</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -139,7 +146,7 @@
                 <div class="row">
                     <div class="col-lg-4 col-12">
                         <div class="single-block give-review">
-                            <h4> {{ number_format( $product->reviews_avg_rating, 1) }} (Overall)</h4>
+                            <h4> {{ number_format($product->reviews_avg_rating, 1) }} (Overall)</h4>
 
                             <ul>
                                 <li>
@@ -200,16 +207,14 @@
                                         <img src="https://via.placeholder.com/150x150" alt="#">
                                         <div class="review-info">
                                             <h4> {{ $item->subject }}
-                                                <span>{{ $item->user->name}}</span>
+                                                <span>{{ $item->user->name }}</span>
                                             </h4>
                                             <ul class="stars">
                                                 @for ($i = 1; $i <= $item->rating; $i++)
                                                     <li><i class="lni lni-star-filled"></i></li>
                                                 @endfor
-                                                @for ($i = 0; $i < (5- $item->rating); $i++)
-
-                                                        <li><i class="lni lni-star"></i></li>
-
+                                                @for ($i = 0; $i < 5 - $item->rating; $i++)
+                                                    <li><i class="lni lni-star"></i></li>
                                                 @endfor
                                             </ul>
                                             <p>{{ $item->message }}</p>
@@ -223,7 +228,7 @@
                 </div>
                 <div class="row">
                     <h2>Similer Products</h2>
-                    @foreach ($product->category->products()->where('id','<>',$product->id)->get() as $similer_product)
+                    @foreach ($product->category->products()->where('id', '<>', $product->id)->get() as $similer_product)
                         <div class="col-lg-3 col-md-6 col-12">
                             <x-product-card :product="$similer_product" />
                         </div>

@@ -17,7 +17,7 @@ class shopLayout extends Component
     public $categories;
     public function __construct($title,$showbreadcrumb = true)
     {
-        //
+
         $this->title = $title;
         $this->showbreadcrumb = $showbreadcrumb;
 

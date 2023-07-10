@@ -11,11 +11,13 @@ class Category extends Model
     use HasFactory;
         protected $fillable =['name','image'];
 
+        protected $appends = ['image_url'];
+        protected $hidden = ['image','created_at','updated_at'];
 
         public function products(){
             return $this->hasMany(Product::class);
         }
-        
+
         public function getImageUrlAttribute(){
             if ($this->image) {
                 return Storage::disk('public')->url($this->image);

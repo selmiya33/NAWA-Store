@@ -11,6 +11,9 @@ class ProductImage extends Model
     use HasFactory;
 
     protected $fillable =['product_id','image'];
+    protected $appends = ['url'];
+    protected $hidden = ['image','created_at','updated_at'];
+
 
     public function getUrlAttribute(){
         return Storage::disk('public')->url($this->image);

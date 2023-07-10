@@ -31,10 +31,10 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // $cookie_id = $request->cookie('cart_id');
-        // $cart = Cart::where('cookie_id','=',$cookie_id)->get();
         // $user = Auth::user()->id;
-        // $cart->user_id =  $user;
-        // $cart->save();
+        // session(['user' => $user]);
+
+        // $cart = Cart::where('cookie_id','=',$cookie_id)->update(['user_id'=>session('user') ?? null]);
 
         return redirect()->intended('/');
     }

@@ -2,21 +2,28 @@
 
 namespace App\Notifications;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class NewOrderNotification extends Notification
 {
     use Queueable;
+/**
+ * @var \App\Models\Order
+ */
+    protected $order;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+
+    public function __construct(Order $order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -26,7 +33,10 @@ class NewOrderNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        // $notifiable الشخص الي ح يستقبل الرسالة
+        //mail - Database - vonage(sms) - slack - twillo (sms) -telegram
+        //laravel notification chanels
+        return ['mail','database'];
     }
 
     /**
@@ -35,11 +45,22 @@ class NewOrderNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->subject('New Order #' . $this->order->id)
+                    ->greeting('hello '. $notifiable->name)
+                    ->line('a new order has been created')
+                    ->action('View order', route('orders.show',$this->order->id))
+
+                    ->line('Thank you !!');
     }
 
+    public function toDatabase(object $notifiable): DatabaseMessage
+    {
+        return new DatabaseMessage([
+            'body'=>"A new order # {$this->order->id} has been created",
+            'icon' =>'fas fa-envelope',
+            'link' => route('orders.show',$this->order->id),
+        ]);
+    }
     /**
      * Get the array representation of the notification.
      *

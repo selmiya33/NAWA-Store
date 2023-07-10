@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewController;
@@ -24,5 +25,6 @@ Route::get('/checkout',[CheckoutController::class,'create'])->name('checkout');
 Route::post('/checkout',[CheckoutController::class,'store']);
 Route::get('/checkout/thankyou',[CheckoutController::class,'thank'])->name('checkout.success');
 
+Route::resource('/orders', OrdersController::class);
 
 

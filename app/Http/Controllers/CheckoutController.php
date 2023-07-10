@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderLine;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -83,6 +85,11 @@ class CheckoutController extends Controller
                 ])
                 ->with('error', $e->getMessage());
         }
+
+        //send notification to admin
+        $user = User::where('type','=','super-admin')->first();
+        $user->notify(new NewOrderNotification($order));
+        
         return redirect()->route('checkout.success');
     }
 

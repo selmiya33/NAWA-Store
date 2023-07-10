@@ -23,7 +23,7 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         $product = $this->route('product',new Product);
-        $id = $product? $product->id : 0;
+        $id = $product ? $product->id : 0;
 
         return [
             'name_product'=>'nullable|required|max:255|min:3',
@@ -43,9 +43,9 @@ class ProductRequest extends FormRequest
         ];
     }
 
-    
+
     public function messages():array{
-        
+
         return[
             'required' => ':attribute this field is required!!',
             'unique' => 'the value already exists',

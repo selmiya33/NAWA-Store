@@ -14,10 +14,14 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
+     * /vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php
      */
     public function register(): void
     {
-        //
+        // set the public path to this directory
+        // $this->app->bind('path.public', function () {
+        //     return base_path() . '/public_html';
+        // });
     }
 
     /**

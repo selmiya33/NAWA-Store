@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\review;
+use App\Models\Review;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +30,6 @@ class ReviewController extends Controller
      */
     public function store(Request $request, $id)
     {
-        //
-
-
         $review = new Review();
         $review->rating = $request->input('rating');
         $review->message = $request->input('message');

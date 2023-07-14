@@ -15,6 +15,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/tiny-slider.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/glightbox.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
+    <script src="{{ asset('js/timer.js') }}"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 
 </head>
 
@@ -80,7 +86,7 @@
                             <ul class="useful-links">
                                 <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="about-us.html">About Us</a></li>
-                                <li><a href="contact.html">Contact Us</a></li>
+                                <li><a href="{{ route('contact.index') }}">Contact Us</a></li>
                             </ul>
                         </div>
                     </div>
@@ -94,12 +100,14 @@
                                 <ul class="user-login">
 
                                     <li>
-                                        <a href="{{ route("profile.edit") }}">Profile</a>
+                                        <a href="{{ route('profile.edit') }}">Profile</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit()">Logout</a>
+                                        <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logoutForm').submit()">Logout</a>
                                     </li>
-                                    <form id="logoutForm" action="{{ route('logout') }}" method="post" style="display: none">
+                                    <form id="logoutForm" action="{{ route('logout') }}" method="post"
+                                        style="display: none">
                                         @csrf
                                     </form>
 
@@ -130,8 +138,8 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-7">
                         <!-- Start Header Logo -->
-                        <a class="navbar-brand" href="index.html">
-                            <img src="assets/images/logo/logo.svg" alt="Logo">
+                        <a class="navbar-brand" href="{{ route('home') }}">
+                            <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo">
                         </a>
                         <!-- End Header Logo -->
                     </div>
@@ -140,27 +148,28 @@
                         <div class="main-menu-search">
                             <!-- navbar search start -->
                             <form action="{{ URL::current() }}" method="get">
-                            <div class="navbar-search search-style-5">
-                                <div class="search-select">
-                                    <div class="select-position">
-                                        <select id="select1">
-                                            <option selected>All</option>
-                                            <option value="1">option 01</option>
-                                            <option value="2">option 02</option>
-                                            <option value="3">option 03</option>
-                                            <option value="4">option 04</option>
-                                            <option value="5">option 05</option>
-                                        </select>
+                                <div class="navbar-search search-style-5">
+                                    <div class="search-select">
+                                        <div class="select-position">
+                                            <select id="select1">
+                                                <option selected>All</option>
+                                                <option value="1">option 01</option>
+                                                <option value="2">option 02</option>
+                                                <option value="3">option 03</option>
+                                                <option value="4">option 04</option>
+                                                <option value="5">option 05</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="search-input">
+                                        <input type="text" placeholder="Search" name="search"
+                                            value="{{ request('search') }}">
+                                    </div>
+                                    <div class="search-btn">
+                                        <button><i class="lni lni-search-alt"></i></button>
                                     </div>
                                 </div>
-                                <div class="search-input">
-                                    <input type="text" placeholder="Search" name="search" value="{{ request('search') }}">
-                                </div>
-                                <div class="search-btn">
-                                    <button><i class="lni lni-search-alt"></i></button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
                             <!-- navbar search Ends -->
                         </div>
                         <!-- End Main Menu Search -->
@@ -183,43 +192,36 @@
                                 <div class="cart-items">
                                     <a href="javascript:void(0)" class="main-btn">
                                         <i class="lni lni-cart"></i>
-                                        <span class="total-items">2</span>
+                                        <span class="total-items">{{ $cart->count() }}</span>
                                     </a>
                                     <!-- Shopping Item -->
                                     <div class="shopping-item">
                                         <div class="dropdown-cart-header">
-                                            <span>2 Items</span>
+                                            <span>{{ $cart->count() }} Items</span>
                                             <a href="{{ route('cart') }}">View Cart</a>
                                         </div>
                                         <ul class="shopping-list">
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove"
-                                                    title="Remove this item"><i class="lni lni-close"></i></a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html"><img
-                                                            src="assets/images/header/cart-items/item1.jpg"
-                                                            alt="#"></a>
-                                                </div>
+                                            @foreach ($cart as $item)
+                                                <li>
+                                                    <a href="javascript:void(0)" class="remove"
+                                                        title="Remove this item"><i class="lni lni-close"></i></a>
+                                                    <div class="cart-img-head">
+                                                        <a class="cart-img"
+                                                            href="{{ route('shop.products.show', $item->product->slug) }}">
+                                                            <img src="{{ $item->product->image_url }}" alt="#"
+                                                                width="90" height="60"></a>
+                                                    </div>
 
-                                                <div class="content">
-                                                    <h4><a href="product-details.html">
-                                                            Apple Watch Series 6</a></h4>
-                                                    <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove"
-                                                    title="Remove this item"><i class="lni lni-close"></i></a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html"><img
-                                                            src="assets/images/header/cart-items/item2.jpg"
-                                                            alt="#"></a>
-                                                </div>
-                                                <div class="content">
-                                                    <h4><a href="product-details.html">Wi-Fi Smart Camera</a></h4>
-                                                    <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                                </div>
-                                            </li>
+                                                    <div class="content">
+                                                        <h4><a
+                                                                href="{{ route('shop.products.show', $item->product->slug) }}">
+                                                                {{ $item->product->name_product }}</a></h4>
+                                                        <p class="quantity">{{ $item->quantity }}<span
+                                                                class="amount">{{ $item->product->price_formatted }}</span>
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            @endforeach
                                         </ul>
                                         <div class="bottom">
                                             <div class="total">
@@ -227,7 +229,7 @@
                                                 <span class="total-amount">$134.00</span>
                                             </div>
                                             <div class="button">
-                                                <a href="checkout.html" class="btn animate">Checkout</a>
+                                                <a href="{{ route('checkout') }}" class="btn animate">Checkout</a>
                                             </div>
                                         </div>
                                     </div>
@@ -301,10 +303,9 @@
                                         <ul class="sub-menu collapse" id="submenu-1-2">
                                             <li class="nav-item active"><a href="about-us.html">About Us</a></li>
                                             <li class="nav-item"><a href="faq.html">Faq</a></li>
-                                            <li class="nav-item"><a href="login.html">Login</a></li>
-                                            <li class="nav-item"><a href="register.html">Register</a></li>
-                                            <li class="nav-item"><a href="mail-success.html">Mail Success</a></li>
-                                            <li class="nav-item"><a href="404.html">404 Error</a></li>
+                                            <li class="nav-item"><a href="{{ route('login') }}">Login</a></li>
+                                            <li class="nav-item"><a href="{{ route('register') }}">Register</a></li>
+                                            <li class="nav-item"><a href="mail-success.html"></a></li>
                                         </ul>
                                     </li>
                                     <li class="nav-item">
@@ -321,22 +322,10 @@
                                             <li class="nav-item"><a href="checkout.html">Checkout</a></li>
                                         </ul>
                                     </li>
+
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-4"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Blog</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-4">
-                                            <li class="nav-item"><a href="blog-grid-sidebar.html">Blog Grid
-                                                    Sidebar</a>
-                                            </li>
-                                            <li class="nav-item"><a href="blog-single.html">Blog Single</a></li>
-                                            <li class="nav-item"><a href="blog-single-sidebar.html">Blog Single
-                                                    Sibebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="contact.html" aria-label="Toggle navigation">Contact Us</a>
+                                        <a href="{{ route('contact.index') }}" aria-label="Toggle navigation">Contact
+                                            Us</a>
                                     </li>
                                 </ul>
                             </div> <!-- navbar collapse -->
@@ -349,18 +338,12 @@
                     <div class="nav-social">
                         <h5 class="title">Follow Us:</h5>
                         <ul>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-instagram"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-skype"></i></a>
-                            </li>
+                            @foreach ($accounts as $account)
+                                <li>
+                                    <a href="{{ $account->url }}" target="_blank"><i
+                                            class="lni {{ $account->icon }}"></i></a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <!-- End Nav Social -->
@@ -403,8 +386,8 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-12">
                             <div class="footer-logo">
-                                <a href="index.html">
-                                    <img src="assets/images/logo/white-logo.svg" alt="#">
+                                <a href="{{ route('home') }}">
+                                    <img src="{{ asset('assets/images/logo/white-logo.svg') }}" alt="#">
                                 </a>
                             </div>
                         </div>
@@ -454,20 +437,24 @@
                             <div class="single-footer our-app">
                                 <h3>Our Mobile App</h3>
                                 <ul class="app-btn">
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-apple"></i>
-                                            <span class="small-title">Download on the</span>
-                                            <span class="big-title">App Store</span>
-                                        </a>
-                                    </li>
-                                    <li>
+                                    @foreach ($accounts as $account)
+                                        @if (str_contains(strtolower($account->platform), 'store') || str_contains(strtolower($account->platform), 'play'))
+                                            <li>
+                                                <a href="{{ $account->url }}">
+                                                    <i class="lni {{ $account->icon }}"></i>
+                                                    <span class="small-title">Download on the</span>
+                                                    <span class="big-title">{{ ucwords($account->platform) }}</span>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                    {{-- <li>
                                         <a href="javascript:void(0)">
                                             <i class="lni lni-play-store"></i>
                                             <span class="small-title">Download on the</span>
                                             <span class="big-title">Google Play</span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </div>
                             <!-- End Single Widget -->
@@ -478,7 +465,7 @@
                                 <h3>Information</h3>
                                 <ul>
                                     <li><a href="javascript:void(0)">About Us</a></li>
-                                    <li><a href="javascript:void(0)">Contact Us</a></li>
+                                    <li><a href="{{ route('contact.index') }}">Contact Us</a></li>
                                     <li><a href="javascript:void(0)">Downloads</a></li>
                                     <li><a href="javascript:void(0)">Sitemap</a></li>
                                     <li><a href="javascript:void(0)">FAQs Page</a></li>
@@ -504,39 +491,7 @@
             </div>
         </div>
         <!-- End Footer Middle -->
-        <!-- Start Footer Bottom -->
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="inner-content">
-                    <div class="row align-items-center">
-                        <div class="col-lg-4 col-12">
-                            <div class="payment-gateway">
-                                <span>We Accept:</span>
-                                <img src="assets/images/footer/credit-cards-footer.png" alt="#">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-12">
-                            <div class="copyright">
-                                <p>Designed and Developed by<a href="https://graygrids.com/" rel="nofollow"
-                                        target="_blank">GrayGrids</a></p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-12">
-                            <ul class="socila">
-                                <li>
-                                    <span>Follow Us On:</span>
-                                </li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-google"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Footer Bottom -->
+
     </footer>
     <!--/ End Footer Area -->
 

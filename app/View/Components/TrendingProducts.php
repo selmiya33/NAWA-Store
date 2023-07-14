@@ -14,17 +14,12 @@ class TrendingProducts extends Component
      */
     public $products;
     public $title;
-    public function __construct($title ="Trending Product",$count="8")
+    public function __construct($title = "Trending Product", $count = "8")
     {
-        //
-        $this->title=$title;
-        $this->products = Product::withoutGlobalscope('owner')
-        ->latest('updated_at')
-        // ->inRandomOrder()
-        // ->take($count) // ===limit(8)
-        // ->get()
-        ->paginate($count);
-
+        $this->title = $title;
+        $this->products = Product::active()
+            ->latest('updated_at')
+            ->paginate($count);
     }
 
     /**

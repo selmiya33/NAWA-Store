@@ -27,30 +27,15 @@ class ProductController extends Controller
                 'status_options' => Product::statusOpations(),
             ]);
         }
-
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-
-        // $products = Product::LeftJoin('categories', 'categories.id', '=', 'products.category_id')
-        //     ->select([
-        //         'products.*',
-        //         'categories.name as category_name',
-        //     ])
-        $products = Product::
-            // ->whereNull('deleted_at')
-            // ->onlyTrashed()
-            // ->withTrashed()
-            withoutGlobalScope('owner')
-            ->with('category')
-            // ->withoutGlobalScopes()
-            // ->active()
-            // -> status('draft')
+        $products = Product::with('category')
             ->filter($request->query())
-            ->paginate(3) //simplepaginate(3)
+            ->paginate() //simplepaginate()
             ->withQueryString();
 
         return view('admin.products.index', [

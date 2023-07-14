@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withoutGlobalscope('owner')->withCount('products')->paginate(3);
+        $categories = Category::withCount('products')->paginate(3);
         return view('Admin.categories.index', [
             'title' => 'categories',
             'categories' => $categories,

@@ -132,7 +132,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </li>
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item dropdown">
-<x-admin.notification />
+                    <x-admin.notification />
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">

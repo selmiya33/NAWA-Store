@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('products',ProductsController::class);
-Route::apiResource('categories',CategoryController::class)->middleware('auth:sanctum');
+Route::apiResource('categories',CategoryController::class);
 Route::post('access-tokens',[AccessTokensController::class,'store'])->middleware('guest:sanctum');
 Route::delete('access-tokens',[AccessTokensController::class,'destroy'])->middleware('auth:sanctum');
 

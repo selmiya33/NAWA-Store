@@ -89,7 +89,7 @@ class CheckoutController extends Controller
         //send notification to admin
         $user = User::where('type','=','super-admin')->first();
         $user->notify(new NewOrderNotification($order));
-        
+
         return redirect()->route('checkout.success');
     }
 

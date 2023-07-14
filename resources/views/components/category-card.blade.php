@@ -4,12 +4,12 @@
         <div class="single-category" >
             <h3 class="heading">{{ $category->name }}</h3>
             <ul style="width: 90px; height: 150px;">
-            @foreach ($category->products()->withoutGlobalscope('owner')->get() as $product)
+            @foreach ($category->products()->active()->get() as $product)
                 <li ><a href="product-grids.html">{{ $product->name_product }}</a></li>
             @endforeach
         </ul>
             <div class="images">
-                <img src="{{ $category->image_url }}" alt="#" width="180" height="180">
+                <img src="{{ $category->image_url }}"  width="180" height="180">
             </div>
         </div>
         <!-- End Single Category -->

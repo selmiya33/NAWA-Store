@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Request;
 
 class Product extends Model
 {
@@ -16,7 +17,16 @@ class Product extends Model
 
 
     protected $fillable = [
-        'name_product', 'slug', 'price', 'description', 'short_description', 'status', 'category_id', 'comper_price', 'image', 'user_id'
+        'name_product',
+        'slug',
+        'price',
+        'description',
+        'short_description',
+        'status',
+        'category_id',
+        'comper_price',
+        'image',
+        'user_id'
     ];
 
     protected $appends = [
@@ -45,6 +55,7 @@ class Product extends Model
         ];
     }
 
+    //**************Relations*******************
     public function category()
     {
         return $this->belongsTo(Category::class)->withDefault(["name" => "NoCategory"]);
@@ -64,8 +75,6 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
-
-
     public function users()
     {
         return $this->belongsToMany(User::class, 'carts', 'product_id', 'user_id', 'id', 'id')
@@ -74,14 +83,16 @@ class Product extends Model
             ->using(Cart::class);
     }
 
-    //Attribute accessors get----Attributenn//img_url
-    public function getImageUrlAttribute()
+    // *********************Attribute accessors*******************
+    public function getImageUrlAttribute() //img_url
     {
         if ($this->image) {
+
             return Storage::disk('public')->url($this->image);
         }
-        return 'https://placehold.co/100x100/orange/white?text=add+Image';
+        return 'https://placehold.co/100x100/orange/white?text=Image';
     }
+
     // public function getName_ProductAttribute($value){
     //     return ucwords($value);
 
@@ -99,7 +110,20 @@ class Product extends Model
         return $foramtter->formatCurrency($this->comper_price, 'USD');
     }
 
-    // // global scope
+    public function getDiscountAttribute()
+    {
+        if ($this->comper_price) {
+            $discount = ($this->comper_price - $this->price);
+            $foramtter = new NumberFormatter(config('app.local'), NumberFormatter::CURRENCY);
+            return $foramtter->formatCurrency($discount, 'USD');
+        } else {
+            return 'No Discount Now';
+        }
+    }
+
+
+
+    //******************global scope************************
     // protected static function booted()
     // {
     //     static::addGlobalScope('owner',function(Builder $query){
@@ -108,7 +132,7 @@ class Product extends Model
     //     });
     // }
 
-    //local scope
+    //********************local scope************************
     public function scopeActive(Builder $query)
     {
         $query->where('status', '=', 'active');

@@ -85,7 +85,7 @@
                         <div class="top-middle">
                             <ul class="useful-links">
                                 <li><a href="{{ route('home') }}">Home</a></li>
-                                <li><a href="about-us.html">About Us</a></li>
+                                <li><a href="{{ route('about') }}">About Us</a></li>
                                 <li><a href="{{ route('contact.index') }}">Contact Us</a></li>
                             </ul>
                         </div>
@@ -301,7 +301,7 @@
                                             aria-controls="navbarSupportedContent" aria-expanded="false"
                                             aria-label="Toggle navigation">Pages</a>
                                         <ul class="sub-menu collapse" id="submenu-1-2">
-                                            <li class="nav-item active"><a href="about-us.html">About Us</a></li>
+                                            <li class="nav-item active"><a href="{{ route('about') }}">About Us</a></li>
                                             <li class="nav-item"><a href="faq.html">Faq</a></li>
                                             <li class="nav-item"><a href="{{ route('login') }}">Login</a></li>
                                             <li class="nav-item"><a href="{{ route('register') }}">Register</a></li>
@@ -464,7 +464,7 @@
                             <div class="single-footer f-link">
                                 <h3>Information</h3>
                                 <ul>
-                                    <li><a href="javascript:void(0)">About Us</a></li>
+                                    <li><a href="{{ route('about') }}">About Us</a></li>
                                     <li><a href="{{ route('contact.index') }}">Contact Us</a></li>
                                     <li><a href="javascript:void(0)">Downloads</a></li>
                                     <li><a href="javascript:void(0)">Sitemap</a></li>

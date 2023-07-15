@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Product;
+use App\Models\User;
 use App\Models\Review;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -31,5 +32,11 @@ class HomeController extends Controller
             'topViews' => $topViews,
             'products' =>  $products,
         ]);
+    }
+
+    public function about()
+    {
+        $admins= User::Where('type','LIKE','%admin%')->get();
+        return view('shop.about',['admins'=>$admins]);
     }
 }

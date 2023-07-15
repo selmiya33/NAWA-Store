@@ -7,6 +7,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/products/{product}', [ProductsController::class, 'show'])->name('shop.products.show');
 Route::get('/products/grids/products', [ProductsController::class, 'grid'])->name('shop.product.grids');
@@ -31,6 +32,9 @@ Route::resource('/orders', OrdersController::class);
 //contact us
 Route::get('/contact',[ContactController::class,'index'])->name('contact.index');
 Route::post('/contact',[ContactController::class,'store'])->name('contact.store')->middleware('auth');
+
+Route::get('/about',[HomeController::class,'about'])->name('about');
+
 
 
 
